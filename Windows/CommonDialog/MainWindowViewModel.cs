@@ -42,6 +42,7 @@ namespace CommonDialogs
                 Filter = "Text files (*.txt)|*.txt"
             };
 
+            // 显示预览区域，用于预览所选文件的内容
             // Forces the preview pane to be shown irrespective of the system settings
             openFileDialog.ForcePreviewPane = true;
 
@@ -162,14 +163,13 @@ namespace CommonDialogs
 
         public void GetDialogRelatedInfo(Microsoft.Win32.CommonDialog cd)
         {
-
-            if (cd is OpenFileDialog ofd)
+            if (cd is OpenFileDialog)
             {
                 Data.ResultTitle = "Open File Dialog Results";
                 Data.DialogDescription = "OpenFileDialog is a wrapper around the Win32 common dialog boxes.\n\nThis control allows developers to retrieve the name\\ names of file to open.";
                 Data.ClickOperationDescription = "In this example, we have created an OpenFileDialog that can be used to select multiple text files.\nWe have also set the ForcePreviewPane property to true, which will display the preview pane in the dialog box.\n\nOnce the user clicks OK, we read and display the contents of the file.";
             }
-            else if (cd is SaveFileDialog sfd)
+            else if (cd is SaveFileDialog)
             {
                 Data.ResultTitle = "Save File Dialog Results";
                 Data.DialogDescription = "SaveFileDialog is a wrapper around the Win32 common dialog boxes.\n\nThis control allows developers to retrieve the location and filename, where the user wants to save the file.";
@@ -177,7 +177,7 @@ namespace CommonDialogs
                     "We have set the CreatePrompt and OverwritePrompt property to true, which will display a prompt warning user that the file does not exist and will be created and if you are overwriting an already existing file respectively.\n\n" +
                     "Once the user clicks OK, we write the contents to the selected file.";
             }
-            else if (cd is OpenFolderDialog fbd)
+            else if (cd is OpenFolderDialog)
             {
                Data.ResultTitle = "Open Folder Dialog Results";
                Data.DialogDescription = "OpenFolderDialog is a wrapper around the Win32 common dialog boxes.\n\nThis control allows developers to retrieve\\select the path of a folder.";
