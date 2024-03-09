@@ -36,8 +36,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-  </ItemGroup>
-  <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -45,6 +43,12 @@
     <Page Include="CustomWindowChrome.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="CustomWindowChrome1.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustomWindowStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Compile Include="App.cs">
       <DependentUpon>App.xaml</DependentUpon>
@@ -54,6 +58,8 @@
       <DependentUpon>CustomWindowChrome.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="CustomWindowChrome1.xaml.cs" />
+    <Compile Include="CustomWindowStyle.xaml.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\Resources.Designer.cs">
@@ -66,6 +72,8 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="RelayCommand.cs" />
+    <Compile Include="WindowViewModel.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

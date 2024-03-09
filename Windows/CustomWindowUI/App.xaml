@@ -2,8 +2,463 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:CustomWindowUI"
-             StartupUri="CustomWindowChrome.xaml">
+             StartupUri="CustomWindowStyle.xaml">
     <Application.Resources>
-         
+        <Color x:Key="Primary">#2964FF</Color>
+        <SolidColorBrush x:Key="PrimaryColor" Color="{StaticResource Primary}" />
+        <SolidColorBrush x:Key="PrimaryColor1"
+                         Color="{StaticResource Primary}"
+                         Opacity="0.1" />
+        <SolidColorBrush x:Key="PrimaryColor2"
+                         Color="{StaticResource Primary}"
+                         Opacity="0.2" />
+
+        <SolidColorBrush x:Key="IconColor" Color="#2964FF" />
+        <SolidColorBrush x:Key="TextColor" Color="#272E65" />
+
+        <SolidColorBrush x:Key="DisableBgColor" Color="#828895" />
+        <SolidColorBrush x:Key="DisableTextColor" Color="#828895" />
+
+        <Geometry x:Key="minGeo">M838.69 554.67l3.68-0.16c21.84-1.87 38.98-20.19 38.99-42.51 0-23.56-19.11-42.67-42.67-42.67H185.31l-3.68 0.16c-21.84 1.87-38.98 20.19-38.99 42.51 0 23.56 19.11 42.67 42.67 42.67h653.38z</Geometry>
+        <Geometry x:Key="maxGeo">M827 282c0-46.94-38.06-85-85-85H282c-46.94 0-85 38.06-85 85v460c0 46.94 38.06 85 85 85h460c46.94 0 85-38.06 85-85V282z m-83.96 461.05H280.96V280.96h462.1l-0.02 462.09z</Geometry>
+        <Geometry x:Key="resumeGeo">M793.42 147.01H407.3c-46.16 0-83.58 37.42-83.58 83.58v83.13h-83.14c-46.16 0-83.58 37.42-83.58 83.58v386.11c0 46.16 37.42 83.58 83.58 83.58h386.11c46.16 0 83.58-37.42 83.58-83.58v-83.13h83.14c46.16 0 83.58-37.42 83.58-83.58V230.59c0.03-46.16-37.4-83.58-83.57-83.58z m-165.7 637.44H239.56V396.28h388.18l-0.02 388.17z m166.73-166.72h-84.17V397.3c0-46.16-37.42-83.58-83.58-83.58H406.29v-84.16h388.18l-0.02 388.17z</Geometry>
+        <Geometry x:Key="closeGeo">M755.5 695.16L572.34 512 755.5 328.84l2.49-2.71c14.12-16.76 13.29-41.84-2.49-57.63-16.66-16.66-43.68-16.66-60.34 0L512 451.66 328.84 268.5l-2.71-2.49c-16.76-14.12-41.84-13.29-57.63 2.49-16.66 16.66-16.66 43.68 0 60.34L451.66 512 268.5 695.16l-2.49 2.71c-14.12 16.76-13.29 41.84 2.49 57.63 16.66 16.66 43.68 16.66 60.34 0L512 572.34 695.16 755.5l2.71 2.49c16.76 14.12 41.84 13.29 57.63-2.49 16.67-16.66 16.67-43.67 0-60.34z</Geometry>
+
+        <Style x:Key="ToolTipStyle" TargetType="ToolTip">
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="VerticalAlignment" Value="Top" />
+            <Setter Property="Placement" Value="Bottom" />
+            <Setter Property="VerticalOffset" Value="4" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Grid>
+                            <Border Background="White" CornerRadius="2">
+                                <Border.Effect>
+                                    <DropShadowEffect BlurRadius="7"
+                                                      Direction="0"
+                                                      Opacity="0.09"
+                                                      ShadowDepth="0"
+                                                      Color="Black" />
+                                </Border.Effect>
+                            </Border>
+                            <TextBlock Margin="23,6"
+                                       FontFamily="微软雅黑"
+                                       FontSize="13"
+                                       Foreground="#606266"
+                                       Text="{TemplateBinding ContentControl.Content}"
+                                       TextAlignment="Center" />
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="WinMinButtonStyle" TargetType="Button">
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid>
+                            <Border x:Name="bd"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Stretch"
+                                    Background="Transparent" />
+                            <Path x:Name="icon"
+                                  Fill="#A0A7AB"
+                                  Stretch="Uniform"
+                                  Width="16"
+                                  Height="16"
+                                  Data="{StaticResource minGeo}" />
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter TargetName="bd" Property="Background" Value="#D6D9E2" />
+                                <Setter TargetName="bd" Property="Opacity" Value="0.49" />
+                                <Setter TargetName="icon" Property="Fill" Value="{StaticResource PrimaryColor}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="WinMaxButtonStyle" TargetType="Button">
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid>
+                            <Border x:Name="bd"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Stretch"
+                                    Background="Transparent" />
+                            <Path x:Name="icon"
+                                  Fill="#A0A7AB"
+                                  Stretch="Uniform"
+                                  Width="16"
+                                  Height="16"
+                                  Data="{StaticResource maxGeo}" />
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter TargetName="bd" Property="Background" Value="#D6D9E2" />
+                                <Setter TargetName="bd" Property="Opacity" Value="0.49" />
+                                <Setter TargetName="icon" Property="Fill" Value="{StaticResource PrimaryColor}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="WinResumeButtonStyle" TargetType="Button">
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid>
+                            <Border x:Name="bd"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Stretch"
+                                    Background="Transparent" />
+                            <Path x:Name="icon"
+                                  Fill="#A0A7AB"
+                                  Stretch="Uniform"
+                                  Width="16"
+                                  Height="16"
+                                  Data="{StaticResource resumeGeo}" />
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter TargetName="bd" Property="Background" Value="#D6D9E2" />
+                                <Setter TargetName="bd" Property="Opacity" Value="0.49" />
+                                <Setter TargetName="icon" Property="Fill" Value="{StaticResource PrimaryColor}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="WinCloseButtonStyle" TargetType="Button">
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid>
+                            <Border x:Name="bd"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Stretch"
+                                    Background="Transparent" />
+                            <Path x:Name="icon"
+                                  Fill="#A0A7AB"
+                                  Stretch="Uniform"
+                                  Width="16"
+                                  Height="16"
+                                  Data="{StaticResource closeGeo}" />
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter TargetName="bd" Property="Background" Value="#D6D9E2" />
+                                <Setter TargetName="bd" Property="Opacity" Value="0.49" />
+                                <Setter TargetName="icon" Property="Fill" Value="{StaticResource PrimaryColor}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="BackButtonStyle" TargetType="{x:Type Button}">
+            <Setter Property="BorderBrush" Value="{StaticResource PrimaryColor}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Background" Value="#FFFFFF" />
+            <Setter Property="Width" Value="60" />
+            <Setter Property="Height" Value="28" />
+            <Setter Property="Foreground" Value="{StaticResource PrimaryColor}" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <!--  CornerRadius="4,0,0,4"  -->
+                        <Border x:Name="border"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="4"
+                                SnapsToDevicePixels="true">
+                            <Path x:Name="icon"
+                                  Stretch="Uniform"
+                                  Width="10"
+                                  Height="18"
+                                  Fill="{StaticResource PrimaryColor}"
+                                  Data="M716.879204 813.744345c14.09502 12.824073 15.126512 34.658358 2.303462 48.752354-12.843516 14.09502-34.678824 15.126512-48.752354 2.302439l-364.835266-332.676845c-14.114462-12.844539-15.127536-34.659381-2.302439-48.753377 0.733711-0.815575 1.486864-1.588171 2.302439-2.302439l0.078795-0.080841 0.13917-0.13917 364.616278-332.4773c14.074553-12.824073 35.909861-11.791557 48.752354 2.302439 12.824073 14.09502 11.792581 35.930327-2.303462 48.753377L380.032386 506.593873l336.845795 307.149449L716.879204 813.744345 716.879204 813.744345z" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <!--<Trigger Property="IsMouseOver" Value="True">
+                        <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource PrimaryColor}" />
+                    </Trigger>-->
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="border" Property="BorderBrush" Value="#DFE3E6" />
+                                <Setter TargetName="icon" Property="Fill" Value="#A0A7AB" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="ForwardButtonStyle"
+               BasedOn="{StaticResource BackButtonStyle}"
+               TargetType="{x:Type Button}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Border x:Name="border"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="0,4,4,0"
+                                SnapsToDevicePixels="true">
+                            <Path x:Name="icon"
+                                  Stretch="Uniform"
+                                  Width="10"
+                                  Height="18"
+                                  Fill="{StaticResource PrimaryColor}"
+                                  Data="M305.587883 813.744345c-14.09502 12.824073-15.126512 34.658358-2.303462 48.752354 12.843516 14.09502 34.678824 15.126512 48.752354 2.302439l364.835266-332.676845c14.114462-12.844539 15.127536-34.659381 2.302439-48.753377-0.733711-0.815575-1.486864-1.588171-2.302439-2.302439l-0.078795-0.080841-0.13917-0.13917L352.037798 148.369166c-14.074553-12.824073-35.909861-11.791557-48.752354 2.302439-12.824073 14.09502-11.792581 35.930327 2.303462 48.753377l336.845795 307.168891L305.588907 813.743322 305.587883 813.744345 305.587883 813.744345z" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="border" Property="BorderBrush" Value="#DFE3E6" />
+                                <Setter TargetName="icon" Property="Fill" Value="#DFE3E6" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="MainWindowStyle" TargetType="Window">
+            <Setter Property="WindowState" Value="Maximized" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Window">
+                        <AdornerDecorator>
+                            <Grid x:Name="LayoutRoot" Margin="7.2,7.2,7.2,7.2">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="56" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="130" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <ContentPresenter Grid.RowSpan="2" Grid.ColumnSpan="2" />
+
+                                <!--  head  -->
+                                <Rectangle Grid.Column="1" Height="56">
+                                    <Rectangle.Fill>
+                                        <SolidColorBrush Color="#FFFFFF" />
+                                    </Rectangle.Fill>
+                                </Rectangle>
+
+                                <StackPanel Grid.Column="1"
+                                            Margin="0,0,8,0"
+                                            HorizontalAlignment="Right"
+                                            Orientation="Horizontal"
+                                            WindowChrome.IsHitTestVisibleInChrome="True">
+                                    <ToggleButton Width="40"
+                                                  Height="40"
+                                                  Command="{Binding SettingCommand}"
+                                                  WindowChrome.IsHitTestVisibleInChrome="True"
+                                                  Cursor="Hand">
+                                        <ToggleButton.Template>
+                                            <ControlTemplate>
+                                                <Grid Background="Transparent">
+                                                    <Border x:Name="bd"
+                                                            HorizontalAlignment="Stretch"
+                                                            VerticalAlignment="Stretch"
+                                                            Background="Transparent" />
+                                                    <Path x:Name="icon"
+                                                          Fill="#A0A7AB"
+                                                          Stretch="Uniform"
+                                                          Width="24"
+                                                          Height="24"
+                                                          Data="M440.88705,294.39999 C373.74563,294.42319 319.32903,348.85858 319.32903,416 319.32903,483.14142 373.74563,537.57678 440.88705,537.59998 484.34054,537.61499 524.49966,514.44147 546.23074,476.81213 567.96181,439.1828 567.96181,392.8172 546.23074,355.18787 524.49966,317.55853 484.34054,294.38501 440.88705,294.39999 z M440.88705,230.39999 C543.36605,230.43536 626.42294,313.52097 626.42294,416 626.42294,518.479 543.36605,601.56464 440.88705,601.59998 374.56329,601.62286 313.26781,566.25275 280.09933,508.81848 246.93084,451.38428 246.93084,380.61572 280.09933,323.18149 313.26781,265.74725 374.56329,230.37714 440.88705,230.39999 z M294.96703,64 C258.10305,64 224.31106,84.479996 207.31264,117.1456 L75.216652,370.2272 C60.237953,398.9043 60.237953,433.0957 75.216652,461.77283 L207.31264,714.85437 C224.34829,747.51599 258.12969,767.99792 294.96703,768 L589.52065,768 C626.69186,768 660.68862,747.21283 677.58462,714.13757 L806.96706,461.00482 C821.41659,432.74133 821.41659,399.25867 806.96706,370.99521 L806.96706,370.944 677.58462,117.8624 C660.67757,84.791962 626.66225,63.987259 589.52065,64 z M294.96703,0 L589.52065,0 C650.70467,0 706.71743,34.304001 734.57027,88.729599 L863.95266,341.8624 C887.76064,388.45441 887.76064,443.5968 863.95266,490.13757 L734.57027,743.27039 C706.72231,797.74176 650.69778,832.01306 589.52065,832 L294.96703,832 C234.28716,831.99146 178.64342,798.25006 150.58305,744.448 L18.487045,491.36639 C-6.1623459,444.14532 -6.1623459,387.85468 18.487045,340.63361 L150.58305,87.500793 C178.65737,33.718582 234.29833,-0.001449585 294.96703,0 z" />
+                                                </Grid>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter TargetName="bd" Property="Background" Value="#D6D9E2" />
+                                                        <Setter TargetName="bd" Property="Opacity" Value="0.49" />
+                                                        <Setter TargetName="icon" Property="Fill" Value="{StaticResource PrimaryColor}" />
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </ToggleButton.Template>
+                                        <ToggleButton.ToolTip>
+                                            <ToolTip Content="设置" Style="{StaticResource ToolTipStyle}" />
+                                        </ToggleButton.ToolTip>
+                                    </ToggleButton>
+
+                                    <Button x:Name="min"
+                                            Width="40"
+                                            Height="40"
+                                            Command="{Binding MinCommand}"
+                                            CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"
+                                            Visibility="{Binding ShowMinBtn}"
+                                            WindowChrome.IsHitTestVisibleInChrome="True"
+                                            Style="{StaticResource WinMinButtonStyle}">
+                                        <Button.ToolTip>
+                                            <ToolTip Content="最小化" Style="{StaticResource ToolTipStyle}" />
+                                        </Button.ToolTip>
+                                    </Button>
+
+                                    <Button Width="40"
+                                            Height="40"
+                                            Command="{Binding CloseCommand}"
+                                            CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"
+                                            WindowChrome.IsHitTestVisibleInChrome="True"
+                                            Style="{StaticResource WinCloseButtonStyle}">
+                                        <Button.ToolTip>
+                                            <ToolTip Content="关闭" Style="{StaticResource ToolTipStyle}" />
+                                        </Button.ToolTip>
+                                    </Button>
+                                </StackPanel>
+
+                                <ContentPresenter Grid.RowSpan="2"
+                                                  Grid.ColumnSpan="2"
+                                                  ContentSource="Tag" />
+                            </Grid>
+                        </AdornerDecorator>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+            <Setter Property="WindowChrome.WindowChrome">
+                <Setter.Value>
+                    <WindowChrome ResizeBorderThickness="0"
+                                  CaptionHeight="0"
+                                  GlassFrameThickness="0"
+                                  CornerRadius="0" />
+
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="WindowStyle" TargetType="Window">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Window">
+                        <AdornerDecorator>
+                            <Grid x:Name="LayoutRoot">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="{Binding ToolsHeight}" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+
+                                <ContentPresenter Grid.Row="1" />
+
+                                <!--  head  -->
+                                <Rectangle Height="{Binding ToolsHeight}">
+                                    <Rectangle.Fill>
+                                        <SolidColorBrush Color="#E6E9EF" />
+                                    </Rectangle.Fill>
+                                </Rectangle>
+
+                                <TextBlock FontSize="16"
+                                           Foreground="#12222E"
+                                           VerticalAlignment="Center"
+                                           HorizontalAlignment="Center"
+                                           Text="{TemplateBinding Title}" />
+
+                                <StackPanel HorizontalAlignment="Right"
+                                            Orientation="Horizontal"
+                                            WindowChrome.IsHitTestVisibleInChrome="True">
+                                    <Button x:Name="min"
+                                            Width="40"
+                                            Height="40"
+                                            Command="{Binding MinCommand}"
+                                            CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"
+                                            Visibility="{Binding ShowMinBtn}"
+                                            WindowChrome.IsHitTestVisibleInChrome="True"
+                                            Style="{StaticResource WinMinButtonStyle}">
+                                        <Button.ToolTip>
+                                            <ToolTip Content="最小化" Style="{StaticResource ToolTipStyle}" />
+                                        </Button.ToolTip>
+                                    </Button>
+
+                                    <Grid Visibility="{Binding ShowMaxBtn}" WindowChrome.IsHitTestVisibleInChrome="True">
+                                        <Button x:Name="max"
+                                                Width="40"
+                                                Height="40"
+                                                Command="{Binding MaxCommand}"
+                                                CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"
+                                                WindowChrome.IsHitTestVisibleInChrome="True"
+                                                Style="{StaticResource WinMaxButtonStyle}">
+                                            <Button.ToolTip>
+                                                <ToolTip Content="最大化" Style="{StaticResource ToolTipStyle}" />
+                                            </Button.ToolTip>
+                                        </Button>
+
+                                        <Button x:Name="norman"
+                                                Width="40"
+                                                Height="40"
+                                                Command="{Binding MaxCommand}"
+                                                CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"
+                                                Visibility="Collapsed"
+                                                WindowChrome.IsHitTestVisibleInChrome="True"
+                                                Style="{StaticResource WinResumeButtonStyle}">
+                                            <Button.ToolTip>
+                                                <ToolTip Content="还原" Style="{StaticResource ToolTipStyle}" />
+                                            </Button.ToolTip>
+                                        </Button>
+                                    </Grid>
+
+                                    <Button Width="40"
+                                            Height="40"
+                                            HorizontalAlignment="Right"
+                                            Command="{Binding CloseCommand}"
+                                            CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"
+                                            WindowChrome.IsHitTestVisibleInChrome="True"
+                                            Style="{StaticResource WinCloseButtonStyle}">
+                                        <Button.ToolTip>
+                                            <ToolTip Content="关闭" Style="{StaticResource ToolTipStyle}" />
+                                        </Button.ToolTip>
+                                    </Button>
+                                </StackPanel>
+
+                            </Grid>
+                        </AdornerDecorator>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="WindowState" Value="Maximized">
+                                <Setter TargetName="LayoutRoot" Property="Margin" Value="7.2,7.2,7.2,7.2" />
+                                <Setter TargetName="norman" Property="Visibility" Value="Visible" />
+                                <Setter TargetName="max" Property="Visibility" Value="Collapsed" />
+                            </Trigger>
+                            <Trigger Property="WindowState" Value="Normal">
+                                <Setter TargetName="max" Property="Visibility" Value="Visible" />
+                                <Setter TargetName="norman" Property="Visibility" Value="Collapsed" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+            <Setter Property="WindowChrome.WindowChrome">
+                <Setter.Value>
+                    <WindowChrome ResizeBorderThickness="6"
+                                  CaptionHeight="{Binding Caption}"
+                                  GlassFrameThickness="0"
+                                  UseAeroCaptionButtons="False"
+                                  CornerRadius="2" />
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Application.Resources>
 </Application>

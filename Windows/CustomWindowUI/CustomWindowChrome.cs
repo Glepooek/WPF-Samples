@@ -31,13 +31,13 @@ namespace CustomWindowUI
         private void ResizeThumb_DragDelta(object sender, DragDeltaEventArgs e)
         {
             // Resize window width (honoring minimum width)
-            var desiredWidth = (int) (ActualWidth + e.HorizontalChange);
-            var minWidth = (int) (MinWidth + resizeThumb.Width + resizeThumb.Margin.Right);
+            var desiredWidth = (int)(ActualWidth + e.HorizontalChange);
+            var minWidth = (int)(MinWidth + resizeThumb.Width + resizeThumb.Margin.Right);
             Width = Math.Max(desiredWidth, minWidth);
 
             // Resize window height (honoring minimum height)
-            var desiredHeight = (int) (ActualHeight + e.VerticalChange);
-            var minHeight = (int) (MinHeight + resizeThumb.Height + resizeThumb.Margin.Bottom);
+            var desiredHeight = (int)(ActualHeight + e.VerticalChange);
+            var minHeight = (int)(MinHeight + resizeThumb.Height + resizeThumb.Margin.Bottom);
             Height = Math.Max(desiredHeight, minHeight);
         }
     }
