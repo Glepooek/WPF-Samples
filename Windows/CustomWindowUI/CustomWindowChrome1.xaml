@@ -10,30 +10,40 @@
         Height="450"
         Width="800">
 
+    <!--
+        GlassFrameThickness="0,32,0,0"，不设置不显示最大化、最小化等按钮
+        CaptionHeight="32"，不设置顶部不能拖动
+    -->
     <WindowChrome.WindowChrome>
-        <WindowChrome GlassFrameThickness="0,32,0,0" NonClientFrameEdges="Left,Bottom,Right" />
+        <WindowChrome ResizeBorderThickness="6"
+                      GlassFrameThickness="0,32,0,0"
+                      CaptionHeight="32"
+                      NonClientFrameEdges="Left,Bottom,Right" />
     </WindowChrome.WindowChrome>
 
     <Window.Template>
         <ControlTemplate TargetType="Window">
-            <Border Padding="0,30,0,0">
-                <Grid x:Name="RootGrid" Background="{TemplateBinding Background}">
-                    <Border Background="{TemplateBinding Background}"
-                            VerticalAlignment="Top"
-                            Height="30"
-                            Margin="0,-29,140,0">
-                        <TextBlock Foreground="Black"
-                                   Margin="16,0"
-                                   VerticalAlignment="Center"
-                                   FontSize="12"
-                                   Text="{TemplateBinding Title}" />
-                    </Border>
-                    <ContentPresenter />
-                </Grid>
-            </Border>
+            <Grid x:Name="RootGrid" Background="{TemplateBinding Background}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Border Background="{TemplateBinding Background}"
+                        Height="32"
+                        Margin="0,0,140,0">
+                    <TextBlock x:Name="Title"
+                               Foreground="Black"
+                               Margin="16,0,0,0"
+                               VerticalAlignment="Center"
+                               FontSize="12"
+                               Text="{TemplateBinding Title}" />
+                </Border>
+                <ContentPresenter Grid.Row="1" />
+            </Grid>
             <ControlTemplate.Triggers>
                 <Trigger Property="WindowState" Value="Maximized">
                     <Setter TargetName="RootGrid" Property="Margin" Value="6" />
+                    <Setter TargetName="Title" Property="Margin" Value="16,6,0,0" />
                 </Trigger>
             </ControlTemplate.Triggers>
         </ControlTemplate>
