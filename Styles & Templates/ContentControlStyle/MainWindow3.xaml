@@ -65,7 +65,6 @@
         <ContentPresenter Grid.Row="1"
                           VerticalAlignment="Center"
                           HorizontalAlignment="Center"
-                          ContentTemplateSelector="{StaticResource PersonTemplateSelector}"
                           Content="{Binding CurrentPersonVM}" />
     </Grid>
 </Window>
