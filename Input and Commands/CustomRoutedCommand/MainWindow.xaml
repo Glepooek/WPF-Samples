@@ -5,60 +5,69 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CustomRoutedCommand"
         mc:Ignorable="d"
-        Title="MainWindow" Name="RootWindow" Height="500" Width="600"
+        Title="MainWindow"
+        Name="RootWindow"
+        Height="500"
+        Width="600"
         Focusable="True">
-    <!-- </SnippetCustomCommandMapping-->
+    <!--  </SnippetCustomCommandMapping  -->
     <Window.CommandBindings>
         <CommandBinding Command="{x:Static local:MainWindow.ColorCmd}"
-                    Executed="ColorCmdExecuted"
-                    CanExecute="ColorCmdCanExecute"/>
+                        Executed="ColorCmdExecuted"
+                        CanExecute="ColorCmdCanExecute" />
     </Window.CommandBindings>
     <DockPanel>
-        <Menu DockPanel.Dock="Top"
-          Height="25">
+        <Menu DockPanel.Dock="Top" Height="25">
             <MenuItem Header="Commands">
-                <MenuItem Header="Color Command"
-                  Command="{x:Static local:MainWindow.ColorCmd}" />
+                <MenuItem Header="Color Command" Command="{x:Static local:MainWindow.ColorCmd}" />
             </MenuItem>
         </Menu>
-        <Border BorderBrush="Black" BorderThickness="1" Margin="10"
-            Height="165" Width="250" DockPanel.Dock="Top">
+        <Border BorderBrush="Black"
+                BorderThickness="1"
+                Margin="10"
+                Height="165"
+                Width="250"
+                DockPanel.Dock="Top">
             <TextBlock TextWrapping="Wrap" Margin="3">
-        The Color Command chages the background color of a StackPanel.
-        <LineBreak/>
-        <LineBreak/>
-        In order for the command attached to the MenuItem to be enabled, the
-        StackPanel must have keyboard focus.  Use the TAB key to change focus.
-        <LineBreak/>
-        <LineBreak/>
-        Since the command attached to the Button has the CommandTarget
-        set to the first StackPanel, the StackPanel does not need focus.
-        <LineBreak/>
+                The Color Command chages the background color of a StackPanel.<LineBreak />
+                <LineBreak />
+                In order for the command attached to the MenuItem to be enabled, the
+                StackPanel must have keyboard focus.  Use the TAB key to change focus.<LineBreak />
+                <LineBreak />
+                Since the command attached to the Button has the CommandTarget
+                set to the first StackPanel, the StackPanel does not need focus.<LineBreak />
             </TextBlock>
         </Border>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"
-                DockPanel.Dock="Bottom">
-            <Border BorderBrush="Black" BorderThickness="1" Margin="10"
-              Height="200" Width="200">
+        <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Center"
+                    DockPanel.Dock="Bottom">
+            <Border BorderBrush="Black"
+                    BorderThickness="1"
+                    Margin="10"
+                    Height="200"
+                    Width="200">
                 <StackPanel Name="FirstStackPanel"
-                    Background="AliceBlue"
-                    Focusable="True">
+                            Background="AliceBlue"
+                            Focusable="True">
                     <StackPanel.CommandBindings>
                         <CommandBinding Command="{x:Static local:MainWindow.ColorCmd}"
-                            Executed="ColorCmdExecuted"
-                            CanExecute="ColorCmdCanExecute"/>
+                                        Executed="ColorCmdExecuted"
+                                        CanExecute="ColorCmdCanExecute" />
                     </StackPanel.CommandBindings>
 
                     <Label>First StackPanel</Label>
 
                     <Button Command="{x:Static local:MainWindow.ColorCmd}"
-                  CommandParameter="ButtonOne"
-                  CommandTarget="{Binding ElementName=FirstStackPanel}" 
-                  Content="CommandTarget = FristStackPanel" />
+                            CommandParameter="ButtonOne"
+                            CommandTarget="{Binding ElementName=FirstStackPanel}"
+                            Content="CommandTarget = FristStackPanel" />
                 </StackPanel>
             </Border>
-            <Border BorderBrush="Black" BorderThickness="1" Margin="10"
-              Height="200" Width="200">
+            <Border BorderBrush="Black"
+                    BorderThickness="1"
+                    Margin="10"
+                    Height="200"
+                    Width="200">
                 <StackPanel Background="AliceBlue" Focusable="True">
                     <Label>Second StackPanel</Label>
                 </StackPanel>
