@@ -30,8 +30,9 @@ public partial class MainWindow : Window
         Toggle_TitleButtonVisibility();
 
         _navigationService = navigationService;
+        _navigationService.Navigating += OnNavigating;
         _navigationService.SetFrame(this.RootContentFrame);
-        _navigationService.NavigateTo(typeof(DashboardPage));
+        _navigationService.Navigate(typeof(DashboardPage));
 
         WindowChrome.SetWindowChrome(
             this,
@@ -44,6 +45,20 @@ public partial class MainWindow : Window
                 UseAeroCaptionButtons = true
             }
         );
+
+        this.StateChanged += MainWindow_StateChanged;
+    }
+
+    private void MainWindow_StateChanged(object sender, EventArgs e)
+    {
+        if (this.WindowState == WindowState.Maximized)
+        {
+            MainGrid.Margin = new Thickness(8);
+        }
+        else
+        {
+            MainGrid.Margin = default;
+        }
     }
 
     private IServiceProvider _serviceProvider;
@@ -55,7 +70,14 @@ public partial class MainWindow : Window
     {
         if (ControlsList.SelectedItem is NavigationItem navItem)
         {
-            _navigationService.NavigateTo(navItem.PageType);
+            _navigationService.Navigate(navItem.PageType);
+
+            var tvi = ControlsList.ItemContainerGenerator.ContainerFromItem(navItem) as TreeViewItem;
+            if(tvi != null)
+            {
+                tvi.IsExpanded = true;
+                tvi.BringIntoView();
+            }
         }
     }
 
@@ -103,7 +125,6 @@ public partial class MainWindow : Window
 
     private void MaximizeWindow(object sender, RoutedEventArgs e)
     {
-        Console.WriteLine(MaximizeIcon.Text);
         if(this.WindowState == WindowState.Maximized)
         {
             this.WindowState = WindowState.Normal;
@@ -119,5 +140,32 @@ public partial class MainWindow : Window
     private void CloseWindow(object sender, RoutedEventArgs e)
     {
         Application.Current.Shutdown();
+    }
+
+    private void OnNavigating(object? sender, NavigatingEventArgs e)
+    {
+        List<NavigationItem> list = ViewModel.GetNavigationItemHierarchyFromPageType(e.PageType);
+        
+        if (list.Count > 0)
+        {
+            TreeViewItem selectedTreeViewItem = null;
+            ItemsControl itemsControl = ControlsList;
+            foreach(NavigationItem item in list)
+            {
+                var tvi = itemsControl.ItemContainerGenerator.ContainerFromItem(item) as TreeViewItem;
+                if(tvi != null)
+                {
+                    tvi.IsExpanded = true;
+                    tvi.UpdateLayout();
+                    itemsControl = tvi;
+                    selectedTreeViewItem = tvi;
+                }
+            }
+
+            if(selectedTreeViewItem != null)
+            {
+                selectedTreeViewItem.IsSelected = true;
+            }
+        }
     }
 }

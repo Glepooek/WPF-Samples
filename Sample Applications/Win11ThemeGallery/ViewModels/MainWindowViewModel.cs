@@ -27,6 +27,34 @@ public partial class MainWindowViewModel : ObservableObject
         },
         new NavigationItem
         {
+
+            Name = "Design Guidance",
+            PageType = typeof(DesignGuidancePage),
+            Icon = "\xE8FD",
+            Children = new ObservableCollection<NavigationItem>
+            {
+                new NavigationItem
+                {
+                    Name = "Colors",
+                    PageType = typeof(ColorsPage),
+                    Icon = "\xE790"
+                },
+                new NavigationItem
+                {
+                    Name = "Typography",
+                    PageType = typeof(TypographyPage),
+                    Icon = "\xE8D2"
+                },
+                new NavigationItem
+                {
+                    Name = "Icons",
+                    PageType = typeof(IconsPage),
+                    Icon = "\xED58"
+                },
+            }
+        },
+        new NavigationItem
+        {
             Name = "Samples",
             PageType = typeof(SamplesPage),
             Icon = "\xEF58",
@@ -148,6 +176,12 @@ public partial class MainWindowViewModel : ObservableObject
     }
 
     [RelayCommand]
+    public void About()
+    {
+        _navigationService.NavigateTo(typeof(AboutPage));
+    }
+
+    [RelayCommand]
     public void Back()
     {
         _navigationService.NavigateBack();
@@ -209,5 +243,63 @@ public partial class MainWindowViewModel : ObservableObject
             }
         }
         return null;
+    }
+
+    internal List<NavigationItem> GetNavigationItemHierarchyFromPageType(Type? pageType)
+    {
+        List<NavigationItem> list = new List<NavigationItem>();
+        Stack<NavigationItem> _stack = new Stack<NavigationItem>();
+        Stack<NavigationItem> _revStack = new Stack<NavigationItem>();
+        
+        if(pageType == null)
+        {
+            return list;
+        }
+
+        bool found = false;
+
+        foreach(var item in Controls)
+        {
+            _stack.Push(item);
+            found = FindNavigationItemsHierarchyFromPageType(pageType, item.Children, ref _stack);
+            if(found)
+            {
+                break;
+            }
+            _stack.Pop();
+        }
+
+        while(_stack.Count > 0)
+        {
+            _revStack.Push(_stack.Pop());
+        }
+
+        foreach(var item in _revStack)
+        {
+            list.Add(item);
+        }
+
+        return list;
+    }
+
+    private bool FindNavigationItemsHierarchyFromPageType(Type pageType, ICollection<NavigationItem> pages, ref Stack<NavigationItem> stack)
+    {
+        var item = stack.Peek();
+        bool found = false;
+
+        if(pageType == item.PageType)
+        {
+            return true;
+        }
+
+        foreach(var child in item.Children)
+        {
+            stack.Push(child);
+            found = FindNavigationItemsHierarchyFromPageType(pageType, child.Children, ref stack);
+            if(found) { return true; }
+            stack.Pop();
+        }
+
+        return false;
     }
 }

@@ -74,6 +74,8 @@ public partial class App : Application
             services.AddTransient<RichTextEditPageViewModel>();
             services.AddTransient<PasswordBoxPage>();
             services.AddTransient<PasswordBoxPageViewModel>();
+            services.AddTransient<ColorsPage>();
+            services.AddTransient<ColorsPageViewModel>();
 
             services.AddTransient<LayoutPage>();
             services.AddTransient<LayoutPageViewModel>();
@@ -95,12 +97,23 @@ public partial class App : Application
             services.AddTransient<StatusAndInfoPageViewModel>();
             services.AddTransient<SamplesPage>();
             services.AddTransient<SamplesPageViewModel>();
+            services.AddTransient<DesignGuidancePage>();
+            services.AddTransient<DesignGuidancePageViewModel>();
 
             services.AddTransient<UserDashboardPage>();
             services.AddTransient<UserDashboardPageViewModel>();
 
+            services.AddTransient<TypographyPage>();
+            services.AddTransient<TypographyPageViewModel>();
+
+            services.AddTransient<IconsPage>();
+            services.AddTransient<IconsPageViewModel>();
+
             services.AddSingleton<SettingsPage>();
             services.AddSingleton<SettingsPageViewModel>();
+
+            services.AddSingleton<AboutPage>();
+            services.AddSingleton<AboutPageViewModel>();
         }).Build();
 
 

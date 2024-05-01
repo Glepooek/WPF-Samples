@@ -30,17 +30,18 @@
 
     <ScrollViewer Margin="0,0,0,24" Grid.Row="1">
     <StackPanel Margin="0,0,0,24">
-        <controls:ControlExample HeaderText="A 2-state CheckBox." XamlCode="&lt;CheckBox Content=&quot;Standard WPF checkbox&quot; /&gt;">
-            <CheckBox Content="Two-state CheckBox" />
+                <controls:ControlExample HeaderText="A 2-state CheckBox." XamlCode="&lt;CheckBox Content=&quot;Two-state CheckBox&quot; /&gt;">
+            <CheckBox Content="Two-state CheckBox" AutomationProperties.Name="Sample Two State" />
         </controls:ControlExample>
 
 
         <controls:ControlExample
             Margin="0,32,0,0"
             HeaderText="A 3-state CheckBox."
-            XamlCode="&lt;CheckBox IsThreeState=&quot;True&quot; /&gt;">
+            XamlCode="&lt;CheckBox IsThreeState=&quot;True&quot; Content=&quot;Three-state CheckBox&quot; IsChecked=&quot;{x:Null}&quot; /&gt;">
             <CheckBox
                 Content="Three-state CheckBox"
+                AutomationProperties.Name="Sample Three State"
                 IsChecked="{x:Null}"
                 IsThreeState="True" />
         </controls:ControlExample>
@@ -48,7 +49,12 @@
         <controls:ControlExample
             Margin="0,32,0,0"
             HeaderText="Using a 3-state CheckBox."
-            XamlCode="&lt;CheckBox IsThreeState=&quot;True&quot; /&gt;">
+            XamlCode="&lt;StackPanel&gt;
+            &#10;&#9;&lt;CheckBox Content=&quot;Select all&quot; IsThreeState=&quot;True&quot; /&gt;
+            &#10;&#9;&lt;CheckBox Margin=&quot;24,0,0,0&quot; Content=&quot;Option 1&quot; /&gt;
+            &#10;&#9;&lt;CheckBox Margin=&quot;24,0,0,0&quot; Content=&quot;Option 2&quot; /&gt;
+            &#10;&#9;&lt;CheckBox Margin=&quot;24,0,0,0&quot; Content=&quot;Option 3&quot; /&gt;
+            &#10;&lt;/StackPanel&gt;">
             <StackPanel>
                 <CheckBox
                     Command="{Binding ViewModel.SelectAllCheckedCommand, Mode=OneWay}"
