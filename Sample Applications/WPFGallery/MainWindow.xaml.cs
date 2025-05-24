@@ -1,15 +1,11 @@
-﻿using Microsoft.Win32;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
+﻿using System.Windows.Automation;
+using System.Windows.Automation.Peers;
+using System.Windows.Controls.Primitives;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Shell;
+using Microsoft.Win32;
+using WPFGallery.Helpers;
+using WPFGallery.Models;
 using WPFGallery.Navigation;
 using WPFGallery.ViewModels;
 using WPFGallery.Views;
@@ -28,7 +24,8 @@ public partial class MainWindow : Window
         DataContext = this;
         InitializeComponent();
 
-        Toggle_TitleButtonVisibility();
+        UpdateWindowBackground();
+        UpdateMainWindowVisuals();
 
         _navigationService = navigationService;
         _navigationService.Navigating += OnNavigating;
@@ -40,46 +37,35 @@ public partial class MainWindow : Window
             new WindowChrome
             {
                 CaptionHeight = 50,
-                CornerRadius = default,
+                CornerRadius = new CornerRadius(12),
                 GlassFrameThickness = new Thickness(-1),
                 ResizeBorderThickness = ResizeMode == ResizeMode.NoResize ? default : new Thickness(4),
-                UseAeroCaptionButtons = true
+                UseAeroCaptionButtons = true,
+                NonClientFrameEdges = SystemParameters.HighContrast ? NonClientFrameEdges.None :
+                    NonClientFrameEdges.Right | NonClientFrameEdges.Bottom | NonClientFrameEdges.Left
             }
         );
 
         SystemEvents.UserPreferenceChanged += SystemEvents_UserPreferenceChanged;
-        this.StateChanged += MainWindow_StateChanged;
+        this.StateChanged += (s, e) => UpdateMainWindowVisuals();
+        this.Activated += (s, e) => UpdateMainWindowVisuals();
+        this.Deactivated += (s, e) => UpdateMainWindowVisuals();
+    }
+
+    private void UpdateWindowBackground()
+    {
+        if((!Utility.IsBackdropDisabled() && !Utility.IsBackdropSupported()))
+        {
+            this.SetResourceReference(BackgroundProperty, "WindowBackground");
+        }
     }
 
     private void SystemEvents_UserPreferenceChanged(object sender, UserPreferenceChangedEventArgs e)
     {
         Dispatcher.Invoke(() =>
         {
-            if (SystemParameters.HighContrast)
-            {
-                MinimizeButton.Visibility = Visibility.Visible;
-                MaximizeButton.Visibility = Visibility.Visible;
-                CloseButton.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                MinimizeButton.Visibility = Visibility.Collapsed;
-                MaximizeButton.Visibility = Visibility.Collapsed;
-                CloseButton.Visibility = Visibility.Collapsed;
-            }
+            UpdateMainWindowVisuals();
         });
-    }
-
-    private void MainWindow_StateChanged(object sender, EventArgs e)
-    {
-        if (this.WindowState == WindowState.Maximized)
-        {
-            MainGrid.Margin = new Thickness(8);
-        }
-        else
-        {
-            MainGrid.Margin = default;
-        }
     }
 
     private readonly IServiceProvider _serviceProvider;
@@ -87,52 +73,54 @@ public partial class MainWindow : Window
 
     public MainWindowViewModel ViewModel { get; }
 
-    private void ControlsList_SelectedItemChanged()
+    private void UpdateTitleBarButtonsVisibility()
     {
-        if (ControlsList.SelectedItem is NavigationItem navItem)
+        if (Utility.IsBackdropDisabled() || !Utility.IsBackdropSupported() ||
+                SystemParameters.HighContrast == true)
         {
-            _navigationService.Navigate(navItem.PageType);
-            var tvi = ControlsList.ItemContainerGenerator.ContainerFromItem(navItem) as TreeViewItem;
-            if(tvi != null)
-            {
-                tvi.IsExpanded = true;
-                tvi.BringIntoView();
-            }
+            MinimizeButton.Visibility = Visibility.Visible;
+            MaximizeButton.Visibility = Visibility.Visible;
+            CloseButton.Visibility = Visibility.Visible;
+        }
+        else
+        {
+            MinimizeButton.Visibility = Visibility.Collapsed;
+            MaximizeButton.Visibility = Visibility.Collapsed;
+            CloseButton.Visibility = Visibility.Collapsed;
         }
     }
 
-    private void Toggle_TitleButtonVisibility()
+    private void UpdateMainWindowVisuals()
     {
-        var appContextBackdropData = AppContext.GetData("Switch.System.Windows.Appearance.DisableFluentThemeWindowBackdrop");
-        bool disableFluentThemeWindowBackdrop = false;
-
-        if (appContextBackdropData != null)
+        MainGrid.Margin = default;
+        if(WindowState == WindowState.Maximized)
         {
-            disableFluentThemeWindowBackdrop = bool.Parse(Convert.ToString(appContextBackdropData));
+            MainGrid.Margin = SystemParameters.HighContrast ? new Thickness(0,8,0,0) : new Thickness(8);
         }
 
-
-        if (!disableFluentThemeWindowBackdrop)
+        UpdateTitleBarButtonsVisibility();
+    
+        if(SystemParameters.HighContrast == true)
         {
-            foreach (ResourceDictionary mergedDictionary in Application.Current.Resources.MergedDictionaries)
+            HighContrastBorder.SetResourceReference(BorderBrushProperty, IsActive ? SystemColors.ActiveCaptionBrushKey : 
+                                                                                    SystemColors.InactiveCaptionBrushKey);
+            HighContrastBorder.BorderThickness = new Thickness(8, 1, 8, 8);
+            
+            WindowChrome wc = WindowChrome.GetWindowChrome(this);
+            if(wc is not null)
             {
-                if (mergedDictionary.Source != null && mergedDictionary.Source.ToString().EndsWith("Fluent.xaml"))
-                {
-                    if (SystemParameters.HighContrast == true)
-                    {
-                        MinimizeButton.Visibility = Visibility.Visible;
-                        MaximizeButton.Visibility = Visibility.Visible;
-                        CloseButton.Visibility = Visibility.Visible;
-                    }
-                    else
-                    {
-                        MinimizeButton.Visibility = Visibility.Collapsed;
-                        MaximizeButton.Visibility = Visibility.Collapsed;
-                        CloseButton.Visibility = Visibility.Collapsed;
-                    }
+                wc.NonClientFrameEdges = NonClientFrameEdges.None;
+            }
+        }
+        else
+        {
+            HighContrastBorder.BorderBrush = Brushes.Transparent;
+            HighContrastBorder.BorderThickness = new Thickness(0);
 
-                    break;
-                }
+            var wc = WindowChrome.GetWindowChrome(this);
+            if(wc is not null)
+            {
+                wc.NonClientFrameEdges = NonClientFrameEdges.Right | NonClientFrameEdges.Bottom | NonClientFrameEdges.Left;
             }
         }
     }
@@ -174,13 +162,13 @@ public partial class MainWindow : Window
 
     private void OnNavigating(object? sender, NavigatingEventArgs e)
     {
-        List<NavigationItem> list = ViewModel.GetNavigationItemHierarchyFromPageType(e.PageType);
+        List<ControlInfoDataItem> list = ViewModel.GetNavigationItemHierarchyFromPageType(e.PageType);
         
         if (list.Count > 0)
         {
             TreeViewItem selectedTreeViewItem = null;
             ItemsControl itemsControl = ControlsList;
-            foreach(NavigationItem item in list)
+            foreach(ControlInfoDataItem item in list)
             {
                 var tvi = itemsControl.ItemContainerGenerator.ContainerFromItem(item) as TreeViewItem;
                 if(tvi != null)
@@ -209,12 +197,61 @@ public partial class MainWindow : Window
     {
         if (e.Key == Key.Enter) 
         {
-            ControlsList_SelectedItemChanged();
+            SelectedItemChanged(ControlsList.ItemContainerGenerator.ContainerFromItem((sender as TreeView).SelectedItem) as TreeViewItem);
         }
     }
 
     private void ControlsList_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
     {
+        if (e.OriginalSource is ToggleButton)
+        {
+            return;
+        }
+        SelectedItemChanged(ControlsList.ItemContainerGenerator.ContainerFromItem((sender as TreeView).SelectedItem) as TreeViewItem);
+    }
+
+    private void ControlsList_Loaded(object sender, RoutedEventArgs e)
+    {
+        if (ControlsList.Items.Count > 0)
+        {
+            TreeViewItem firstItem = (TreeViewItem)ControlsList.ItemContainerGenerator.ContainerFromItem(ControlsList.Items[0]);
+            if (firstItem != null)
+            {
+                firstItem.IsSelected = true;
+            }
+        }
+    }
+
+    private void SelectedItemChanged(TreeViewItem? tvi)
+    {
         ControlsList_SelectedItemChanged();
+        if (tvi != null)
+        {
+            tvi.IsExpanded = !tvi.IsExpanded;
+        }
+    }
+
+    private void ControlsList_SelectedItemChanged()
+    {
+        if (ControlsList.SelectedItem is ControlInfoDataItem navItem)
+        {
+            _navigationService.Navigate(navItem.PageType);
+            var tvi = ControlsList.ItemContainerGenerator.ContainerFromItem(navItem) as TreeViewItem;
+            if(tvi != null)
+            {
+                tvi.BringIntoView();
+            }
+        }
+    }
+
+    private void SettingsButton_Click(object sender, RoutedEventArgs e)
+    {
+        AutomationPeer peer = UIElementAutomationPeer.CreatePeerForElement((Button)sender);
+        peer.RaiseNotificationEvent(
+           AutomationNotificationKind.Other,
+            AutomationNotificationProcessing.ImportantMostRecent,
+            "Settings Page Opened",
+            "ButtonClickedActivity"
+        );
     }
 }
